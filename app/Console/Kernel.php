@@ -24,7 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
+//         $schedule->command('laracasts:clear-history')
+//                  ->monthly();
+
+        //// $schedule->command('inspire')
         //          ->hourly();
     }
 

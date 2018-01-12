@@ -34,7 +34,7 @@ class RegistrationController extends Controller
 
        // Sign them in
        auth()->login($user);
-
+       session()->flash('message','Thanks for signing up!');
        // Redirect to the home page
 
         return redirect('/');

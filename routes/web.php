@@ -18,6 +18,14 @@ Route::post('/like', 'LikesController@like');
 Route::post('/unlike', 'LikesController@unlike');
 
 
+Route::get('/posts/tags/{tag}', 'TagsController@index');
+
+//Route::get('/', function (){
+//    $user = new App\User;
+//    event(new ThreadCreated($user));
+//});
+
+
 Route::post('/posts/{post}/comments', 'CommentsController@store');
 
 

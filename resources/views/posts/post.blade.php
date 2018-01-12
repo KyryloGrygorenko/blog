@@ -3,7 +3,7 @@
         <a  href="/posts/{{$post->id}}">
             {{$post->title}}
             <br>
-            @if (file_exists(public_path() .'\img\\' .$post->img))
+            @if (file_exists(public_path() .'/img/' .$post->img))
                 <img src="\img\{{$post->img}} "  width="40%" height="40%">
             @endif
         </a>

@@ -11,6 +11,7 @@ use App\Unlike;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class PostsController extends Controller
 {
@@ -22,12 +23,21 @@ class PostsController extends Controller
 
     public function index()
     {
+
         $unfiltered_posts = Post::latest()
             ->filter(request(['month', 'year']))
             ->get();
 
-        $posts=$this->filter_posts($unfiltered_posts);
 
+        if(isset($unfiltered_posts[0]))
+        {
+            $posts=$this->filter_posts($unfiltered_posts);
+
+            return view('posts.index', compact('posts', 'archives'));
+
+        };
+
+        $posts = [];
         return view('posts.index', compact('posts', 'archives'));
     }
 
@@ -39,7 +49,15 @@ class PostsController extends Controller
             ->filter(request(['month', 'year']))
             ->get();
 
-        $posts=$this->filter_posts($unfiltered_posts);
+        if(isset($unfiltered_posts[0]))
+        {
+            $posts=$this->filter_posts($unfiltered_posts);
+
+            return view('posts.index', compact('posts', 'archives'));
+
+        };
+
+        $posts = [];
 
         return view('posts.index', compact('posts', 'archives'));
     }
@@ -61,7 +79,7 @@ class PostsController extends Controller
 
         if ( $is_user_author_of_post || $this->is_user_allowed_to_edit_post($post)) {
             $img_dir=public_path();
-            $img_dir.='\img\\';
+            $img_dir.='/img/';
 
             $all_images = [];
             foreach (scandir($img_dir) as $key => $value) {
@@ -93,12 +111,15 @@ class PostsController extends Controller
         $post->body = request('body');
         $post->title = request('title');
 
-        if(request('img'))
-        {
-            $post->img = request('img');
+        if(Input::file('image')){
+            $image=Input::file('image');
+            $image->move(public_path() . '/img/', $image->getClientOriginalName());
+            $post->img = $image->getClientOriginalName();
+        }else{
+            $post->img = request('image');
         }
+            $post->save();
 
-        $post->save();
 
         return redirect('/posts/' . request('post_id'));
     }
@@ -121,7 +142,7 @@ class PostsController extends Controller
     {
 
         $img_dir=public_path();
-        $img_dir.='\img\\';
+        $img_dir.='/img/';
 
         $all_images = [];
         foreach (scandir($img_dir) as $key => $value) {
@@ -141,26 +162,27 @@ class PostsController extends Controller
 
     public function store()
     {
-        if ($_FILES['image']['name'] != '') {
-
-            $doc = $_FILES['image'];
-            $image = $doc['name'];
-            move_uploaded_file($doc['tmp_name'], 'img/' . $doc['name']);
-        }
-
         $this->validate(request(), [
             'title' => 'required',
             'body' => 'required'
         ]);
 
+        if($image=Input::file('image'))
+        {
+            $image->move(public_path() . '/img/', $image->getClientOriginalName());
+            $image=$image->getClientOriginalName();
+        }else{
+            $image=request('image');
+        }
+
         auth()->user()->publish(
             new Post([
                 'title'=>request('title'),
                 'body'=>request('body'),
-                'img'=>request('img')
+                'img'=>$image
             ])
         );
-
+        session()->flash('message','Your post has now been published!');
         return redirect('/');
 
     }

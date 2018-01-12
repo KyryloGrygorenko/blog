@@ -14,12 +14,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
     <link href="/css/blog.css" rel="stylesheet">
+
 </head>
 
 <body>
 
 @include('layouts.nav')
 @include('layouts.blog-header')
+
+@if ($flash = session('message'))
+    <div id="flash-message" class="alert alert-success" >
+        {{ $flash }}
+    </div>
+@endif
 
 <div class="container">
 
@@ -38,4 +45,5 @@
 @include('layouts.footer')
 
 </body>
+
 </html>

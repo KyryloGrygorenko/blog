@@ -10,7 +10,7 @@
                         <?php foreach ($all_images as $image):?>
 
 
-                        <?php if(file_exists(public_path() .'\img\\' .$image)) { ?>
+                        <?php if(file_exists(public_path() .'/img/' .$image)) { ?>
                         <input type = "image"  disabled value=""  src = "/img/<?=$image?>" width="100px" height="65px"/>
                         <input type="radio" name="img" value="<?=$image?>" >
                         <?php } else{?>

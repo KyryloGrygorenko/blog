@@ -59,7 +59,7 @@ class LikesController extends Controller
             $unlike->post_id = $post_id;
             $unlike->save();
 
-            $like->like = 1;
+            $like->like = 0;
             $like->user_id = $user_id;
             $like->post_id = $post_id;
             $like->save();

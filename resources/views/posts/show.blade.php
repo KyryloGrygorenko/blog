@@ -7,7 +7,7 @@
 
         <br>
 
-        @if (file_exists(public_path() .'\img\\' .$post->img))
+        @if (file_exists(public_path() .'/img/' .$post->img))
             <img src="\img\{{$post->img}} "  width="100%" height="100%">
         @endif
 

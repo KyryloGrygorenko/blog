@@ -15,11 +15,16 @@
         <h4>Chose image from our collection</h4>
         <hr>
         <div style="max-height: 300px; overflow: scroll" >
+           
             @foreach ($all_images as $image)
-
-                @if(file_exists(public_path() .'\img\\' .$image))
+            
+                @if(file_exists(public_path() .'/img/' .$image))
                     <input type = "image"  disabled value=""  src = "/img/{{$image}}" width="100px" height="65px"/>
-                    <input type="radio" name="img" value="{{$image}}" >
+                    @if($post->img==$image)
+                        <input checked type="radio" name="image" value="{{$image}}" >
+                    @else
+                        <input  type="radio" name="image" value="{{$image}}" >
+                    @endif
                 @endif
 
             @endforeach
